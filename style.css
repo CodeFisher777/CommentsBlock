@@ -1,0 +1,135 @@
+@import './reset.css';
+body {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #000000;
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 10px;
+  padding-bottom: 20px;
+  box-shadow: 0 4px 16px #ccc;
+}
+
+.container {
+  max-width: 1000px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+input {
+  width: 100%;
+  padding: 0 0 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: transparent;
+  outline: none;
+  transition: 0.3s;
+}
+input:focus {
+  border-bottom: 1px solid #1a73a8;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 20px;
+}
+.header h1 {
+  padding-top: 10px;
+  font-size: 32px;
+}
+
+.blockComments {
+  display: flex;
+  justify-content: space-between;
+}
+.blockComments .comment-block {
+  margin-bottom: 20px;
+  background-color: rgba(79, 115, 18, 0.1607843137);
+  border-radius: 10px;
+  width: 100%;
+}
+.blockComments .comment-field {
+  border-radius: 10px;
+  width: 100%;
+}
+.blockComments .comment-field p {
+  padding-bottom: 10px;
+  margin: 10px;
+  word-break: break-all;
+}
+.blockComments .comment-field-time {
+  text-align: right;
+  font-style: italic;
+}
+.blockComments .comment-field-name {
+  background-color: rgba(0, 179, 255, 0.2705882353);
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-top: 10px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.blockComments .comment-field-text {
+  background-color: rgba(78, 160, 114, 0.5803921569);
+  border-radius: 10px;
+  padding: 0 10px;
+  padding-top: 10px;
+}
+.blockComments .comment-field-btns {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+.blockComments .comment-field-btns-del {
+  width: 30px;
+  height: 30px;
+  background: url("./images/cart.svg");
+  background-size: contain;
+}
+.blockComments .comment-field-btns-like {
+  width: 30px;
+  height: 30px;
+  background: url("./images/like.png");
+  background-size: contain;
+}
+.blockComments .comment-field-btns-like.on {
+  width: 30px;
+  height: 30px;
+  background: url("./images/likeOn.png");
+  background-size: contain;
+}
+
+.form {
+  padding-bottom: 20px;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+.form-button {
+  display: flex;
+  justify-content: end;
+}
+.form-button-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #0071f0;
+  outline: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.form-button-btn:hover {
+  background-color: rgba(0, 113, 240, 0.7);
+}/*# sourceMappingURL=style.css.map */
