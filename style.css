@@ -113,12 +113,21 @@ input:focus {
 .form {
   padding-bottom: 20px;
 }
+.form input {
+  max-width: 800px;
+  margin-right: 20px;
+}
 .form-group {
-  margin-bottom: 20px;
+  display: flex;
+  margin-bottom: 10px;
+}
+.form-group-error-label {
+  color: red;
 }
 .form-button {
   display: flex;
   justify-content: end;
+  padding-top: 10px;
 }
 .form-button-btn {
   padding: 10px 20px;

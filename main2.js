@@ -2,6 +2,7 @@ if (!localStorage.getItem('comments')) {
   localStorage.setItem('comments', JSON.stringify([]));
 }
 document.getElementById('comment-add').addEventListener('click', function (e) {
+  event.preventDefault();
   let name = document.getElementById('comment-name').value;
   let text = document.getElementById('comment-text').value;
   let date = document.getElementById('comment-date').value;
@@ -27,6 +28,34 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
   }
   getDayName();
 
+  function removeError(input) {
+    input.onfocus = function () {
+      const parent = input.parentNode;
+      if (parent.classList.contains('error')) {
+        parent.querySelector('.form-group-error-label').remove();
+        parent.classList.remove('error');
+      }
+    };
+  }
+  function createError(input, text) {
+    const parent = input.parentNode;
+    const errorLabel = document.createElement('label');
+    errorLabel.classList.add('form-group-error-label');
+    parent.classList.add('error');
+    errorLabel.textContent = text;
+    parent.append(errorLabel);
+  }
+  // валидация name
+  removeError(document.getElementById('comment-name'));
+  if (name == '') {
+    createError(document.getElementById('comment-name'), 'Имя не задано!');
+  }
+  // валидация text
+  removeError(document.getElementById('comment-text'));
+  if (text == '') {
+    createError(document.getElementById('comment-text'), 'Текст не введён!');
+  }
+
   if (name && text) {
     document.getElementById('comment-name').value = '';
     document.getElementById('comment-text').value = '';
@@ -41,8 +70,6 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
     comments.push(['comment' + comments.length, name, text, date2, time]);
     localStorage.setItem('comments', JSON.stringify(comments));
     update_comments();
-  } else {
-    alert('Заполните все поля кроме даты');
   }
 });
 
