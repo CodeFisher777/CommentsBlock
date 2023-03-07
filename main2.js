@@ -4,11 +4,13 @@ if (!localStorage.getItem('comments')) {
 document.getElementById('comment-add').addEventListener('click', function (e) {
   event.preventDefault();
   let name = document.getElementById('comment-name').value;
+  name = name[0].toUpperCase() + name.slice(1);
   let text = document.getElementById('comment-text').value;
   let date = document.getElementById('comment-date').value;
 
   //функция для вчера сегодня
-  let date2 = date.substring(date.length - 2);
+  let dateComment = date.substring(date.length - 2);
+
   function getDayName() {
     let today = new Date().getDate() + '';
     let yesterday = new Date().getDate() - 1 + '';
@@ -18,24 +20,28 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
     if (yesterday.length === 1) {
       yesterday = '0' + yesterday;
     }
-    if (date2 === today) {
-      return (date2 = 'Сегодня');
-    } else if (date2 === yesterday) {
-      return (date2 = 'Вчера');
+    if (dateComment === today) {
+      return (dateComment = 'Сегодня');
+    } else if (dateComment === yesterday) {
+      return (dateComment = 'Вчера');
     } else {
-      return (date2 = date);
+      return (dateComment = date);
     }
   }
   getDayName();
 
   function removeError(input) {
+    const parent = input.parentNode;
     input.onfocus = function () {
-      const parent = input.parentNode;
       if (parent.classList.contains('error')) {
         parent.querySelector('.form-group-error-label').remove();
         parent.classList.remove('error');
       }
     };
+    if (parent.classList.contains('error')) {
+      parent.querySelector('.form-group-error-label').remove();
+      parent.classList.remove('error');
+    }
   }
   function createError(input, text) {
     const parent = input.parentNode;
@@ -45,29 +51,59 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
     errorLabel.textContent = text;
     parent.append(errorLabel);
   }
-  // валидация name
-  removeError(document.getElementById('comment-name'));
-  if (name == '') {
-    createError(document.getElementById('comment-name'), 'Имя не задано!');
-  }
-  // валидация text
-  removeError(document.getElementById('comment-text'));
-  if (text == '') {
-    createError(document.getElementById('comment-text'), 'Текст не введён!');
+
+  // валидация date
+  function validationDate() {
+    removeError(document.getElementById('comment-date'));
+    let dateNow = timeConverter2(Math.floor(Date.now() / 1000));
+    if (dateNow < date) {
+      createError(document.getElementById('comment-date'), 'указана не корректная дата');
+      return false;
+    }
+    {
+      return true;
+    }
   }
 
-  if (name && text) {
+  // валидация name
+  function validationName() {
+    removeError(document.getElementById('comment-name'));
+    if (name) {
+      return true;
+    } else {
+      createError(document.getElementById('comment-name'), 'Имя не задано!');
+      return false;
+    }
+  }
+
+  // валидация text
+  function validationText() {
+    removeError(document.getElementById('comment-text'));
+    if (text && text.length > 4 && text.length) {
+      return true;
+    } else {
+      createError(document.getElementById('comment-text'), 'Текст не введён или менее 5 символов!');
+      return false;
+    }
+  }
+  let dateOk = validationDate();
+  let nameOk = validationName();
+  let textOk = validationText();
+  if (dateOk && nameOk && textOk) {
+    setComments();
+  }
+  function setComments() {
     document.getElementById('comment-name').value = '';
     document.getElementById('comment-text').value = '';
     document.getElementById('comment-date').value = '';
-    let id = 1;
+
     let time = Math.floor(Date.now() / 1000);
-    if (!date2) {
-      date2 = 'Сегодня';
+    if (!dateComment) {
+      dateComment = 'Сегодня';
     }
 
     let comments = JSON.parse(localStorage.getItem('comments'));
-    comments.push(['comment' + comments.length, name, text, date2, time]);
+    comments.push(['comment' + comments.length, name, text, dateComment, time]);
     localStorage.setItem('comments', JSON.stringify(comments));
     update_comments();
   }
@@ -84,7 +120,7 @@ function update_comments() {
   for (let i = 0; i < comments.length; i++) {
     out += `<div class="comment-block"><p class="comment-field-time">${
       comments[i][3]
-    } в ${timeConverter(comments[i][4])}</p>`;
+    }, ${timeConverter(comments[i][4])}</p>`;
     out += `<p class="comment-field-name">${comments[i][1]}</p>`;
     out += `<p class="comment-field-text">${comments[i][2]}</p>`;
     out += `<div class="comment-field-btns"><button data-like="${comments[i][0]}" id="like${comments[i][0]}" class="comment-field-btns-like"></button><button data-delete="${comments[i][0]}" class="comment-field-btns-del" id="delete"></button></div></div>`;
@@ -125,13 +161,24 @@ document.querySelector('#comment-field').addEventListener('click', function (e) 
 // timeconverter
 function timeConverter(UNIX_timestamp) {
   let a = new Date(UNIX_timestamp * 1000);
-  let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  let hour = a.getHours();
+  let min = a.getMinutes();
+  if (min < 10) {
+    min = '0' + min;
+  }
+  let time = hour + ':' + min;
+  return time;
+}
+
+function timeConverter2(UNIX_timestamp) {
+  let a = new Date(UNIX_timestamp * 1000);
+  let months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
   let year = a.getFullYear();
   let month = months[a.getMonth()];
   let date = a.getDate();
-  let hour = a.getHours();
-  let min = a.getMinutes();
-  let sec = a.getSeconds();
-  let time = hour + ':' + min;
-  return time;
+  if (date < 10) {
+    date = '0' + date;
+  }
+  let dateNow = year + '-' + month + '-' + date;
+  return dateNow;
 }
