@@ -35,6 +35,9 @@ input {
     border-bottom: 1px solid #1a73a8;
   }
 }
+label {
+  cursor: default;
+}
 .header {
   display: flex;
   justify-content: center;
@@ -52,7 +55,7 @@ input {
   .comment {
     &-block {
       margin-bottom: 20px;
-      background-color: #4f731229;
+      background-color: rgba(215, 231, 244, 0.62);
       border-radius: 10px;
 
       width: 100%;
@@ -61,7 +64,7 @@ input {
       border-radius: 10px;
       width: 100%;
       p {
-        padding-bottom: 10px;
+        padding: 10px;
         margin: 10px;
         word-break: break-all;
       }
@@ -113,8 +116,22 @@ input {
 }
 .form {
   input {
-    max-width: 700px;
+    max-width: 650px;
     margin-right: 20px;
+  }
+  textarea {
+    resize: none;
+    width: 650px;
+    height: 100px;
+    margin-right: 20px;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: transparent;
+    outline: none;
+    transition: 0.3s;
+    &:focus {
+      border-bottom: 1px solid #1a73a8;
+    }
   }
   padding-bottom: 20px;
   &-group {

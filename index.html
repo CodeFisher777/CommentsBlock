@@ -9,8 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
-    <title>Document</title>
-
+    <title>CommentsBlock</title>
 </head>
 
 <body>
@@ -23,20 +22,14 @@
                 <div class="form">
                     <form action="">
                         <div class="form-group">
-
                             <input type="date" class="input-date" id="comment-date">
-                            <!-- <label for="comment-date">Дата:</label> -->
                         </div>
                         <div class="form-group">
-
                             <input type="name" class="input-name" id="comment-name" placeholder="Введите имя">
-                            <!-- <label class="form-label" for="comment-name">Имя:</label> -->
                         </div>
                         <div class="form-group">
-
-                            <input type="text" class="input-text" id="comment-text"
-                                placeholder="Введите текст комментария">
-                            <!-- <label class="form-label" for="comment-text">Комментарий:</label> -->
+                            <textarea type="text" class="input-text" id="comment-text"
+                                placeholder="Введите текст комментария"></textarea>
                         </div>
                         <div class="form-button">
                             <button type="submit" id="comment-add" class="form-button-btn">Добавить
@@ -46,7 +39,6 @@
                 </div>
                 <div class="blockComments">
                     <div id="comment-field" class="comment-field"></div>
-
                 </div>
             </div>
         </main>

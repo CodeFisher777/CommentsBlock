@@ -55,7 +55,10 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
     removeError(document.getElementById('comment-date'));
 
     if (dateNow < date) {
-      createError(document.getElementById('comment-date'), 'указана не корректная дата');
+      createError(
+        document.getElementById('comment-date'),
+        'Не только лишь все могут смотреть в завтрашний день! ©',
+      );
       return false;
     }
     {
@@ -98,7 +101,7 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
     document.getElementById('comment-date').value = '';
 
     let comments = JSON.parse(localStorage.getItem('comments'));
-    comments.push(['comment' + comments.length, name, text, dateComment, time]);
+    comments.push(['comment' + comments.length, name, text, dateComment, time, false]);
     localStorage.setItem('comments', JSON.stringify(comments));
     update_comments();
   }
@@ -118,7 +121,9 @@ function update_comments() {
     }, ${timeConverter(comments[i][4])}</p>`;
     out += `<p class="comment-field-name">${comments[i][1]}</p>`;
     out += `<p class="comment-field-text">${comments[i][2]}</p>`;
-    out += `<div class="comment-field-btns"><button data-like="${comments[i][0]}" id="like${comments[i][0]}" class="comment-field-btns-like"></button><button data-delete="${comments[i][0]}" class="comment-field-btns-del" id="delete"></button></div></div>`;
+    comments[i][5]
+      ? (out += `<div class="comment-field-btns"><button data-like="${comments[i][0]}" id="like${comments[i][0]}" class="comment-field-btns-like on"></button><button data-delete="${comments[i][0]}" class="comment-field-btns-del" id="delete"></button></div></div>`)
+      : (out += `<div class="comment-field-btns"><button data-like="${comments[i][0]}" id="like${comments[i][0]}" class="comment-field-btns-like"></button><button data-delete="${comments[i][0]}" class="comment-field-btns-del" id="delete"></button></div></div>`);
   }
   commentField.innerHTML = out;
 }
@@ -149,6 +154,8 @@ document.querySelector('#comment-field').addEventListener('click', function (e) 
   for (let i = 0; i < comments.length; i++) {
     if (comments[i][0] == e.target.dataset.like) {
       document.querySelector(`#like${comments[i][0]}`).classList.toggle('on');
+      comments[i][5] = !comments[i][5];
+      localStorage.setItem('comments', JSON.stringify(comments));
     }
   }
 });
