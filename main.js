@@ -3,33 +3,30 @@ if (!localStorage.getItem('comments')) {
 }
 document.getElementById('comment-add').addEventListener('click', function (e) {
   event.preventDefault();
+  //Создание переменных
   let name = document.getElementById('comment-name').value;
-  name = name[0].toUpperCase() + name.slice(1);
   let text = document.getElementById('comment-text').value;
   let date = document.getElementById('comment-date').value;
-
-  //функция для вчера сегодня
-  let dateComment = date.substring(date.length - 2);
-
-  function getDayName() {
-    let today = new Date().getDate() + '';
-    let yesterday = new Date().getDate() - 1 + '';
-    if (today.length === 1) {
-      today = '0' + today;
-    }
-    if (yesterday.length === 1) {
-      yesterday = '0' + yesterday;
-    }
-    if (dateComment === today) {
+  let time = Math.floor(Date.now() / 1000);
+  let dateNow = dateConverter(time);
+  // функция сравнения дат
+  function compareDate() {
+    let dif = +dateNow.split('-').join('') - +date.split('-').join('');
+    if (dif === 0) {
       return (dateComment = 'Сегодня');
-    } else if (dateComment === yesterday) {
+    } else if (dif === 1) {
       return (dateComment = 'Вчера');
     } else {
       return (dateComment = date);
     }
   }
-  getDayName();
+  compareDate();
+  //если дата не указана, то текущая
+  if (!dateComment) {
+    dateComment = 'Сегодня';
+  }
 
+  // функция удаления ошибок
   function removeError(input) {
     const parent = input.parentNode;
     input.onfocus = function () {
@@ -43,6 +40,7 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
       parent.classList.remove('error');
     }
   }
+  // функция создания ошибок
   function createError(input, text) {
     const parent = input.parentNode;
     const errorLabel = document.createElement('label');
@@ -51,11 +49,11 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
     errorLabel.textContent = text;
     parent.append(errorLabel);
   }
-
+  //Блок валидации
   // валидация date
   function validationDate() {
     removeError(document.getElementById('comment-date'));
-    let dateNow = timeConverter2(Math.floor(Date.now() / 1000));
+
     if (dateNow < date) {
       createError(document.getElementById('comment-date'), 'указана не корректная дата');
       return false;
@@ -69,7 +67,8 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
   function validationName() {
     removeError(document.getElementById('comment-name'));
     if (name) {
-      return true;
+      name = name[0].toUpperCase() + name.slice(1);
+      return true, name;
     } else {
       createError(document.getElementById('comment-name'), 'Имя не задано!');
       return false;
@@ -92,15 +91,11 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
   if (dateOk && nameOk && textOk) {
     setComments();
   }
+  //функция для записи
   function setComments() {
     document.getElementById('comment-name').value = '';
     document.getElementById('comment-text').value = '';
     document.getElementById('comment-date').value = '';
-
-    let time = Math.floor(Date.now() / 1000);
-    if (!dateComment) {
-      dateComment = 'Сегодня';
-    }
 
     let comments = JSON.parse(localStorage.getItem('comments'));
     comments.push(['comment' + comments.length, name, text, dateComment, time]);
@@ -110,7 +105,7 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
 });
 
 update_comments();
-
+//функция рендера
 function update_comments() {
   let commentField = document.getElementById('comment-field');
   let comments = JSON.parse(localStorage.getItem('comments'));
@@ -143,7 +138,7 @@ document.querySelector('#comment-field').addEventListener('click', function (e) 
   }
 });
 
-// функция установки лайка
+// установить/снять лайк
 document.querySelector('#comment-field').addEventListener('click', function (e) {
   e.preventDefault();
   if (!e.target.dataset.like) {
@@ -158,7 +153,7 @@ document.querySelector('#comment-field').addEventListener('click', function (e) 
   }
 });
 
-// timeconverter
+// converter для времени
 function timeConverter(UNIX_timestamp) {
   let a = new Date(UNIX_timestamp * 1000);
   let hour = a.getHours();
@@ -169,8 +164,8 @@ function timeConverter(UNIX_timestamp) {
   let time = hour + ':' + min;
   return time;
 }
-
-function timeConverter2(UNIX_timestamp) {
+// converter для даты
+function dateConverter(UNIX_timestamp) {
   let a = new Date(UNIX_timestamp * 1000);
   let months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
   let year = a.getFullYear();
