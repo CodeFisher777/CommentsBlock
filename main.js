@@ -29,7 +29,7 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
   // функция удаления ошибок
   function removeError(input) {
     const parent = input.parentNode;
-    input.onfocus = function () {
+    input.oninput = function () {
       if (parent.classList.contains('error')) {
         parent.querySelector('.form-group-error-label').remove();
         parent.classList.remove('error');
