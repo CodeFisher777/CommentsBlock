@@ -67,13 +67,18 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
   }
 
   // валидация name
+  const regularTest = (value) => {
+    const usernameRegex = /^[а-яА-ЯЁёaA-z0-9_.]+$/;
+    return usernameRegex.test(value);
+  };
+
   function validationName() {
     removeError(document.getElementById('comment-name'));
-    if (name) {
+    if (name && regularTest(name)) {
       name = name[0].toUpperCase() + name.slice(1);
       return true, name;
     } else {
-      createError(document.getElementById('comment-name'), 'Имя не задано!');
+      createError(document.getElementById('comment-name'), 'Имя должно состоять из букв, цифр и _');
       return false;
     }
   }
