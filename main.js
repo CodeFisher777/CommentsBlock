@@ -68,7 +68,7 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
 
   // валидация name
   const regularTest = (value) => {
-    const usernameRegex = /^[а-яА-ЯЁёaA-z0-9_.]+$/;
+    const usernameRegex = /^[а-яА-ЯЁёaA-z0-9_]+$/;
     return usernameRegex.test(value);
   };
 
