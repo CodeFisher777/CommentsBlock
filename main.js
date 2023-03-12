@@ -2,7 +2,7 @@ if (!localStorage.getItem('comments')) {
   localStorage.setItem('comments', JSON.stringify([]));
 }
 document.getElementById('comment-add').addEventListener('click', function (e) {
-  event.preventDefault();
+  e.preventDefault();
   //Создание переменных
   let name = document.getElementById('comment-name').value;
   let text = document.getElementById('comment-text').value;
@@ -93,9 +93,11 @@ document.getElementById('comment-add').addEventListener('click', function (e) {
       return false;
     }
   }
+
   let dateOk = validationDate();
   let nameOk = validationName();
   let textOk = validationText();
+  text = findAndReplaceLink(text);
   if (dateOk && nameOk && textOk) {
     setComments();
   }
@@ -150,7 +152,6 @@ document.querySelector('#comment-field').addEventListener('click', function (e) 
 
 // установить/снять лайк
 document.querySelector('#comment-field').addEventListener('click', function (e) {
-  e.preventDefault();
   if (!e.target.dataset.like) {
     return;
   }
@@ -188,4 +189,12 @@ function dateConverter(UNIX_timestamp) {
   }
   let dateNow = year + '-' + month + '-' + date;
   return dateNow;
+}
+
+// функция трансформации ссылок в тег
+function findAndReplaceLink(inputText) {
+  let pattern =
+    /([-a-zA-Z0-9@:%_\+.~#?&\/\/=]{2,256}\.[a-zA-Zа-яА-ЯёЁ]{2,4}\b(\/?[-a-zA-Z0-9а-яА-ЯёЁ@:%_\+.~#?&\/\/=]*)?)/gi;
+  let replacedText = inputText.replace(pattern, '<a href="$1" target="_blank">$1</a>');
+  return replacedText;
 }
